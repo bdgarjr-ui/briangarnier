@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Change — Case Study</title>
+<style>
+  :root {
+    --background: #ffffff;
+    --foreground: #252525;
+    --card: #ffffff;
+    --primary: #343434;
+    --muted-foreground: #8e8e8e;
+    --border: #e5e5e5;
+    --brand: #4f5fe0;
+    --brand-10: rgba(79,95,224,0.10);
+    --brand-30: rgba(79,95,224,0.30);
+    --brand-40: rgba(79,95,224,0.40);
+    --brand-70: rgba(79,95,224,0.70);
+    --radius-xl: 0.875rem;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Geist", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .serif { font-family: Georgia, Cambria, "Times New Roman", Times, serif; }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--brand); }
+
+  .wrap { min-height: 100vh; padding-bottom: 6rem; }
+
+  /* header */
+  .header { border-bottom: 1px solid var(--border); }
+  .header-back {
+    max-width: 42rem; margin: 0 auto; padding: 2rem 1.5rem 0;
+  }
+  .header-back a { font-size: 0.875rem; color: var(--muted-foreground); }
+
+  .hero {
+    position: relative;
+    height: 20rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: radial-gradient(circle, rgb(212,212,212) 1px, transparent 1px);
+    background-size: 16px 16px;
+    overflow: hidden;
+  }
+  @media (min-width: 640px) { .hero { height: 24rem; } }
+
+  .hero h1 {
+    position: relative;
+    z-index: 2;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    animation: heroIn 0.6s cubic-bezier(0.4,0,0.2,1) both;
+  }
+  @media (min-width: 640px) { .hero h1 { font-size: 3rem; } }
+
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .highlight {
+    position: relative;
+    display: inline-block;
+    border-radius: 0.5rem;
+    padding: 0 0.25rem 0.25rem;
+    background-image: linear-gradient(to right, var(--brand-40), var(--brand-70));
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
+    animation: sweep 1.4s linear 0.3s both;
+  }
+  @keyframes sweep {
+    from { background-size: 0% 100%; }
+    to { background-size: 100% 100%; }
+  }
+
+  /* main container */
+  .container { max-width: 42rem; margin: 0 auto; padding: 4rem 1.5rem; }
+
+  .intro { max-width: 36rem; margin: 0 0 2rem; font-size: 0.875rem; line-height: 1.7; color: var(--muted-foreground); }
+
+  .meta { margin-bottom: 1.5rem; }
+  .meta-row {
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding: 0.625rem 0; font-size: 0.875rem;
+  }
+  .meta-row:last-child { border-bottom: 1px solid var(--border); }
+  .meta-row .label { color: var(--muted-foreground); }
+  .meta-row .value { text-align: right; }
+
+  .tags { margin-bottom: 4rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 0.25rem 0.75rem; font-size: 0.75rem; color: var(--muted-foreground);
+  }
+
+  section { margin-bottom: 2.5rem; }
+  section:last-child { margin-bottom: 0; }
+
+  h2.section-heading {
+    display: flex; align-items: baseline; gap: 0.75rem;
+    margin-bottom: 1rem; font-size: 1.125rem; font-weight: 400;
+  }
+  h2.section-heading .num { font-size: 0.875rem; color: var(--muted-foreground); font-weight: 400; }
+
+  h3.sub { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 500; }
+
+  p.body-text { margin: 0 0 1rem; font-size: 0.875rem; line-height: 1.7; color: var(--muted-foreground); }
+  p.body-text:last-child { margin-bottom: 0; }
+  p.caption { font-size: 0.75rem; font-style: italic; color: var(--muted-foreground); }
+
+  blockquote {
+    margin: 0 0 1rem; border-left: 2px solid var(--border); padding-left: 1rem;
+    font-size: 0.875rem; font-style: italic; color: var(--muted-foreground);
+  }
+  blockquote .attr { display: block; margin-top: 0.25rem; font-size: 0.75rem; font-style: normal; }
+
+  /* bleed sections */
+  .bleed { margin: 2rem -1.5rem; }
+  .bleed-caption { margin-bottom: 1rem; padding: 0 1.5rem; font-size: 0.75rem; color: var(--muted-foreground); }
+  .bleed-inner { padding: 0 1.5rem; }
+
+  /* business model canvas */
+  .bmc-grid { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 1024px) { .bmc-grid { grid-template-columns: repeat(5, 1fr); } }
+  .cell {
+    border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1rem;
+  }
+  .cell-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;
+  }
+  .cell-title { font-size: 0.875rem; font-style: italic; }
+  .cell-icon {
+    display: flex; align-items: center; justify-content: center;
+    height: 1.5rem; width: 1.5rem; flex-shrink: 0;
+    border-radius: 999px; border: 1px solid var(--border);
+    font-size: 0.75rem;
+  }
+  .cell-body p { margin: 0 0 0.5rem; font-size: 0.75rem; line-height: 1.6; color: var(--muted-foreground); }
+  .cell-body p:last-child { margin-bottom: 0; }
+
+  @media (min-width: 1024px) {
+    .c1 { grid-column: 1 / 2; grid-row: 1 / 3; }
+    .c2 { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .c3 { grid-column: 2 / 3; grid-row: 2 / 3; }
+    .c4 { grid-column: 3 / 4; grid-row: 1 / 3; }
+    .c5 { grid-column: 4 / 5; grid-row: 1 / 2; }
+    .c6 { grid-column: 4 / 5; grid-row: 2 / 3; }
+    .c7 { grid-column: 5 / 6; grid-row: 1 / 3; }
+    .c8 { grid-column: 1 / 3; grid-row: 3 / 4; }
+    .c9 { grid-column: 3 / 6; grid-row: 3 / 4; }
+    .c10 { grid-column: 1 / 3; grid-row: 4 / 5; }
+  }
+
+  /* personas */
+  .persona-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .persona-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .persona-grid { grid-template-columns: repeat(3, 1fr); } }
+  .persona-card { border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1rem; }
+  .persona-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .avatar {
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    height: 2.5rem; width: 2.5rem; border-radius: 999px;
+    border: 1px solid var(--brand-30); background: var(--brand-10);
+    color: var(--brand); font-size: 0.75rem; font-weight: 500;
+  }
+  .persona-name { margin: 0; font-size: 0.875rem; font-weight: 500; }
+  .persona-role { margin: 0; font-size: 0.75rem; color: var(--muted-foreground); }
+  .persona-detail { margin: 0 0 0.5rem; font-size: 0.875rem; line-height: 1.6; color: var(--muted-foreground); }
+  .traits { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+  .trait {
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 0.125rem 0.5rem; font-size: 0.625rem; color: var(--muted-foreground);
+  }
+
+  /* step rail */
+  .step-rail { display: flex; flex-wrap: wrap; row-gap: 1.5rem; }
+  @media (min-width: 640px) { .step-rail { flex-wrap: nowrap; align-items: flex-start; } }
+  .step { width: 50%; display: flex; flex-direction: column; align-items: center; }
+  @media (min-width: 640px) { .step { width: auto; flex: 1; } }
+  .step-line-row { display: flex; align-items: center; width: 100%; }
+  .step-connector { display: none; height: 1px; flex: 1; background: var(--border); }
+  @media (min-width: 640px) { .step-connector { display: block; } }
+  .step-connector.hide { background: transparent; }
+  .step-badge {
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    height: 2rem; width: 2rem; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--card); font-size: 0.75rem; font-weight: 500;
+  }
+  .step-label-wrap { margin-top: 0.5rem; max-width: 9rem; padding: 0 0.25rem; text-align: center; }
+  .step-title { margin: 0; font-size: 0.75rem; font-weight: 500; }
+  .step-detail { margin: 0.125rem 0 0; font-size: 0.6875rem; line-height: 1.4; color: var(--muted-foreground); }
+
+  /* trade-off grid */
+  .tradeoff-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .tradeoff-row { border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1rem; }
+  .tradeoff-title { margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 500; }
+  .tradeoff-cols { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .tradeoff-cols { grid-template-columns: 1fr 1fr; } }
+  .tradeoff-item { display: flex; gap: 0.5rem; }
+  .dot { margin-top: 0.375rem; height: 0.375rem; width: 0.375rem; flex-shrink: 0; border-radius: 999px; }
+  .dot.kept { background: #10b981; }
+  .dot.cut { background: rgba(239,68,68,0.7); }
+  .tradeoff-label { margin: 0 0 0.125rem; font-size: 0.625rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); }
+  .tradeoff-text { margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--muted-foreground); }
+
+  /* graph paper */
+  .graph-paper {
+    margin: 0 1.5rem;
+    display: grid; grid-template-columns: 1fr;
+    border-radius: var(--radius-xl); overflow: hidden;
+    border: 1px solid #d4d4d4; background-color: #fdfdfa;
+    background-image: linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 10px 10px;
+    font-family: "Courier New", monospace;
+    color: #262626;
+  }
+  @media (min-width: 640px) { .graph-paper { grid-template-columns: 1fr 1fr; } }
+  .gp-panel { padding: 1.25rem; border-bottom: 1px solid #d4d4d4; }
+  @media (min-width: 640px) { .gp-panel.left { border-bottom: none; border-right: 1px solid #d4d4d4; } .gp-panel.right { border-bottom: none; } }
+  .gp-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.75rem; }
+  .rot { display: inline-block; transform: rotate(-1deg); }
+  .gp-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.75rem; }
+  .gp-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+  .gp-box { height: 2.25rem; width: 2.25rem; border-radius: 0.25rem; border: 1px solid #a3a3a3; }
+  .gp-item span { font-size: 0.5625rem; transform: rotate(-1deg); }
+  .gp-detail { border-top: 1px dashed #d4d4d4; padding-top: 0.75rem; font-size: 0.75rem; }
+  .gp-detail p { margin: 0.25rem 0; }
+  .gp-note { font-size: 0.6875rem; line-height: 1.5; color: #525252; }
+  .gp-btn { display: inline-block; margin-top: 0.25rem; border: 2px solid #737373; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.625rem; font-weight: 600; }
+  .gp-pay { display: flex; gap: 0.5rem; padding-top: 0.5rem; font-size: 0.625rem; font-weight: 600; }
+  .gp-pay span { border: 1px solid #a3a3a3; border-radius: 0.25rem; padding: 0.125rem 0.375rem; }
+
+  /* wireframes strip */
+  .phone-strip {
+    display: flex; gap: 1.25rem; overflow-x: auto; padding: 0 1.5rem 1rem;
+    scroll-snap-type: x mandatory;
+  }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 9rem; flex-shrink: 0; scroll-snap-align: start; }
+  .phone {
+    position: relative; display: flex; flex-direction: column; gap: 0.375rem;
+    height: 16rem; width: 9rem; overflow: hidden; border-radius: 1.25rem;
+    border: 2px solid rgba(0,0,0,0.7); padding: 0.5rem; background: #fff; color: #111;
+  }
+  .phone.dark { background: #171717; color: #fff; }
+  .phone-notch { margin: 0 auto 0.25rem; height: 0.25rem; width: 2rem; flex-shrink: 0; border-radius: 999px; background: rgba(0,0,0,0.3); }
+  .phone.dark .phone-notch { background: rgba(255,255,255,0.3); }
+  .phone-label { max-width: 9rem; text-align: center; font-size: 0.6875rem; color: var(--muted-foreground); }
+  .pline { height: 0.25rem; border-radius: 0.125rem; background: rgba(0,0,0,0.15); width: 100%; }
+  .phone.dark .pline { background: rgba(255,255,255,0.25); }
+  .pimg { display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; border: 1px solid rgba(0,0,0,0.3); }
+  .pbtn { border-radius: 0.25rem; padding: 0.125rem; text-align: center; font-size: 0.4375rem; font-weight: 500; }
+  .pbtn.solid { background: #10b981; color: #fff; }
+  .pbtn.outline { border: 1px solid rgba(0,0,0,0.3); color: rgba(0,0,0,0.6); }
+  .phone-tiny { font-size: 0.5rem; }
+  .phone-mid { font-size: 0.625rem; }
+
+  /* final screen */
+  .final-wrap { margin: 2rem 0; display: flex; flex-direction: column; align-items: center; }
+  .device {
+    position: relative; width: 16rem; overflow: hidden; border-radius: 2rem;
+    border: 6px solid #171717; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
+  }
+  .device .notch2 {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    z-index: 10; height: 1rem; width: 5rem; border-radius: 0 0 0.75rem 0.75rem; background: #171717;
+  }
+  .device img { display: block; width: 100%; height: auto; }
+  .device-caption { margin-top: 1rem; max-width: 24rem; text-align: center; font-size: 0.75rem; font-style: italic; color: var(--muted-foreground); }
+
+  /* outcome stats */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--border);
+    background: var(--border);
+  }
+  @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+  .stat-cell { background: var(--card); padding: 1.25rem; }
+  .stat-value { display: block; font-size: 1.875rem; color: var(--brand); }
+  .stat-label { display: block; margin-top: 0.25rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); }
+  .stat-note { display: block; margin-top: 0.375rem; font-size: 0.6875rem; line-height: 1.4; color: rgba(142,142,142,0.8); }
+
+  /* tree badge */
+  .tree-badge-wrap { margin-bottom: 1rem; display: flex; flex-direction: column; align-items: center; }
+  .tree-badge {
+    display: flex; height: 6rem; width: 6rem; flex-direction: column; align-items: center; justify-content: center;
+    border-radius: 999px; border: 1px solid var(--border);
+  }
+  .tree-badge svg { margin-bottom: 0.25rem; color: var(--primary); }
+  .tree-badge .n { font-size: 1.25rem; font-weight: 600; }
+  .tree-caption { margin-top: 0.5rem; font-size: 0.75rem; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="header">
+    <div class="header-back">
+      <a href="/">&larr; Back to work</a>
+    </div>
+    <div class="hero">
+      <h1 class="serif">Green <span class="highlight">Change</span></h1>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="intro">
+      Use your remaining change to make a change, in a green way. An e-commerce app that turns
+      an ordinary purchase into a small, ordinary act of generosity: donating toward carbon
+      removal at checkout.
+    </p>
+
+    <div class="meta">
+      <div class="meta-row"><span class="label">Type</span><span class="value">Solo Project · Portfolio VI</span></div>
+      <div class="meta-row"><span class="label">Role</span><span class="value">UX Designer</span></div>
+      <div class="meta-row"><span class="label">Timeline</span><span class="value">3-Month Timeline</span></div>
+      <div class="meta-row"><span class="label">Professors</span><span class="value">Jennifer McCarrick · Kim Morrow</span></div>
+      <div class="meta-row"><span class="label">Tools</span><span class="value">Figma · Balsamiq · Graph Paper</span></div>
+    </div>
+
+    <div class="tags">
+      <span class="tag">UX Design</span>
+      <span class="tag">E-Commerce</span>
+      <span class="tag">Carbon Removal</span>
+      <span class="tag">JTBD</span>
+      <span class="tag">Business Model</span>
+    </div>
+
+    <!-- 01 -->
+    <section>
+      <h2 class="section-heading"><span class="num">01</span><span class="serif">The Background</span></h2>
+      <blockquote>
+        "People do not have easy access to donate money toward companies that remove carbon
+        waste. That was the real starting problem: not a banking problem, not an awareness
+        problem."
+      </blockquote>
+      <p class="body-text">
+        Companies are now monetizing the removal of carbon waste, and I saw a potential way to
+        niche into an e-commerce app marketplace for my school assignment.
+      </p>
+      <h3 class="sub">An Access Problem</h3>
+      <p class="body-text">
+        People do not have easy access to donate money toward companies that remove carbon
+        waste, such as Climeworks (Switzerland) and Chestnut Carbon in the US. That was the real
+        starting problem: not a banking problem, not an awareness problem.
+      </p>
+      <p class="body-text">
+        I wanted to raise awareness of the dangers of carbon emissions in the environment.
+      </p>
+    </section>
+
+    <!-- 02 -->
+    <section>
+      <h2 class="section-heading"><span class="num">02</span><span class="serif">The Evolution of a Problem</span></h2>
+      <h3 class="sub">Original problem</h3>
+      <p class="body-text"><em>"What is the best way to spread awareness, save money, and keep it sustainable?"</em></p>
+      <p class="body-text">
+        That original framing was three problems stapled together, and it took me three months
+        to see that.
+      </p>
+      <h3 class="sub">The real question I landed on</h3>
+      <p class="body-text">
+        <em>"How can we give back when we purchase something from an online store? Where is the
+        donation going, and how is it being used?"</em>
+      </p>
+      <h3 class="sub">Why did this question shift matter?</h3>
+      <p class="body-text">
+        This shift mattered because it moved the project from "an app with eco-friendly
+        features" to "an app that makes generosity visible and trustworthy at the moment
+        someone is already buying something." Once I had that question, the rest of the design
+        started making more sense.
+      </p>
+    </section>
+
+    <!-- 03 -->
+    <section>
+      <h2 class="section-heading"><span class="num">03</span><span class="serif">The Pivot: Three Stages of Ideation</span></h2>
+      <p class="body-text">
+        This project did not start as Green Change. It went through three distinct ideas before
+        landing here, and each pivot taught me something I carried forward.
+      </p>
+      <h3 class="sub">Stage 01: Carbon Removal Investment App</h3>
+      <p class="body-text">
+        My beginning process is understanding the structure of HOW the app is going to work
+        and WHAT the business and stakeholders need before I really start to flesh anything
+        out. That is where my empathetic user research standards come into play.
+      </p>
+      <p class="body-text">
+        I built out a full business model canvas for this: key partners, cost structures,
+        revenue streams, and customer segments. It was real research, not guesswork.
+      </p>
+      <p class="body-text">
+        I approached this head-on with the idea of shipping it out to stakeholders and knowing
+        the business end of the product. That involved understanding what would help this app
+        run for the long haul.
+      </p>
+
+      <h3 class="sub">The Business Model Canvas</h3>
+      <p class="body-text">I segmented it into a few key areas</p>
+    </section>
+
+    <div class="bleed">
+      <div class="bleed-caption">Business model canvas, Stage 01: Carbon Removal Investment App</div>
+      <div class="bleed-inner">
+        <div class="bmc-grid">
+          <div class="cell c1">
+            <div class="cell-head"><span class="cell-title serif">Key partners</span><span class="cell-icon" style="color:#059669">&#129309;</span></div>
+            <div class="cell-body"><p>The back-end developers and companies like Aspiration or Frontier Climate that would partner or back the app from its inception.</p></div>
+          </div>
+          <div class="cell c2">
+            <div class="cell-head"><span class="cell-title serif">Activities needed</span><span class="cell-icon" style="color:#2563eb">&#10003;</span></div>
+            <div class="cell-body"><p>Coding the back end of the app, offering eco-friendly resources, and carbon removal purchasing. The activities are functions that the app needs and can hire a team for.</p></div>
+          </div>
+          <div class="cell c3">
+            <div class="cell-head"><span class="cell-title serif">Key resources</span><span class="cell-icon" style="color:#f59e0b">&#128230;</span></div>
+            <div class="cell-body"><p>What are the key resources or the MVP? Offering products that provide sustainable options. Vetted groups that give back to the environment after donations.</p></div>
+          </div>
+          <div class="cell c4">
+            <div class="cell-head"><span class="cell-title serif">Value proposition</span><span class="cell-icon" style="color:#7c3aed">&#10022;</span></div>
+            <div class="cell-body"><p>I intend to raise awareness of the negative impact of carbon in the environment and draw attention towards an option of investing in companies that remove carbon. View REAL TIME DATA on the dashboard on the amount of CO2 saved.</p></div>
+          </div>
+          <div class="cell c5">
+            <div class="cell-head"><span class="cell-title serif">Customer relation / experience</span><span class="cell-icon" style="color:#eab308">&#9825;</span></div>
+            <div class="cell-body"><p>Personalized Experience and fast support by using an AI chatbot.</p></div>
+          </div>
+          <div class="cell c6">
+            <div class="cell-head"><span class="cell-title serif">Channels</span><span class="cell-icon" style="color:#7c3aed">&#128225;</span></div>
+            <div class="cell-body"><p>Ways to raise brand awareness. Financial magazines, YT or Podcasts. Purchases with a partner program.</p></div>
+          </div>
+          <div class="cell c7">
+            <div class="cell-head"><span class="cell-title serif">Customer segments</span><span class="cell-icon" style="color:#ec4899">&#128101;</span></div>
+            <div class="cell-body">
+              <p>18 and above individuals able to make sound financial decisions.</p>
+              <p>People looking for new eco-friendly investment options.</p>
+            </div>
+          </div>
+          <div class="cell c8">
+            <div class="cell-head"><span class="cell-title serif">Cost structure</span><span class="cell-icon" style="color:#0284c7">&#128179;</span></div>
+            <div class="cell-body"><p>Varied price per ton of carbon removal, i.e., Frontiers 2027 offtake removal cost today is $550 per 1 ton of carbon removal. Employee pay varies. Site maintenance and app fees. Data cost for displaying real-time information: Marketstack API billed yearly $1560.</p></div>
+          </div>
+          <div class="cell c9">
+            <div class="cell-head"><span class="cell-title serif">Revenue streams</span><span class="cell-icon" style="color:#059669">&#128176;</span></div>
+            <div class="cell-body"><p>Possible commission at market price. Advertising.</p></div>
+          </div>
+          <div class="cell c10">
+            <div class="cell-head"><span class="cell-title serif">References</span><span class="cell-icon">&#128279;</span></div>
+            <div class="cell-body">
+              <p>stripe.com/climate</p>
+              <p>aspiration.com</p>
+              <p>frontierclimate.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h3 class="sub">Stage 02: Eco-Friendly Banking / Credit Card Concept</h3>
+      <p class="body-text">
+        Carbon removal stayed consistent as the core goal, so I pushed forward by looking at
+        an eco-friendly credit card that worked like a point system: donate toward carbon
+        removal companies as you spend. I would have liked to keep developing that direction,
+        but the overhead investment required for banking infrastructure was tremendous. That's
+        what made me change course.
+      </p>
+      <h3 class="sub">Stage 03: EcoCon &rarr; Green Change</h3>
+      <p class="body-text">
+        I made the change to a smaller-scale e-commerce app and started with the name
+        "EcoCon," with ChatGPT helping with naming conventions. Some background research
+        showed the name was already registered to a convention, Econcon 2024, which is
+        amazing in itself for "policy experts, organizers, advocates, and policymakers for
+        timely events on how to build an economy that works for all of us," so it was an easy
+        switch to Green Change: use your remaining change to make a change, in a green way.
+        Small and perfect.
+      </p>
+      <p class="body-text">
+        What carried forward through all three stages was the carbon removal mission itself. I
+        kept finding a simpler, more accessible form: from an investment vehicle to a credit
+        product, to a donation moment inside a normal purchase.
+      </p>
+    </section>
+
+    <!-- 04 -->
+    <section>
+      <h2 class="section-heading"><span class="num">04</span><span class="serif">Users and Personas</span></h2>
+      <p class="body-text">
+        I built personas around the core audience I felt this app needed to serve. I started
+        with five and narrowed to three that fit the audience more precisely: Anna (33), Tom
+        (30), and Milly (65, a retired bank manager), an age spread I felt genuinely
+        represented the range of people who'd care about this.
+      </p>
+      <p class="body-text">
+        The clearest version of this is a stay-at-home mom who wants to buy eco-friendly baby
+        wipes. She can buy them through Green Change and then donate her change toward carbon
+        removal. The small, ordinary purchase becomes a small, ordinary act of generosity.
+      </p>
+      <div class="persona-grid">
+        <div class="persona-card">
+          <div class="persona-top">
+            <span class="avatar">A</span>
+            <div><p class="persona-name">Anna</p><p class="persona-role">Age 33</p></div>
+          </div>
+          <p class="persona-detail">The clearest fit for the app: she buys everyday essentials and wants small purchases to carry more weight.</p>
+          <div class="traits"><span class="trait">Eco-conscious shopper</span><span class="trait">Time-poor</span></div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-top">
+            <span class="avatar">T</span>
+            <div><p class="persona-name">Tom</p><p class="persona-role">Age 30</p></div>
+          </div>
+          <p class="persona-detail">Comfortable with apps and donation flows, but skeptical of where his money actually goes.</p>
+          <div class="traits"><span class="trait">Wants transparency</span><span class="trait">Habitual online shopper</span></div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-top">
+            <span class="avatar">M</span>
+            <div><p class="persona-name">Milly</p><p class="persona-role">Age 65 · Retired bank manager</p></div>
+          </div>
+          <p class="persona-detail">Represents the age spread the app needs to serve: financially literate, less at home in a new app.</p>
+          <div class="traits"><span class="trait">Low app fluency</span><span class="trait">High trust bar</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section>
+      <h2 class="section-heading"><span class="num">05</span><span class="serif">Jobs to Be Done</span></h2>
+      <p class="body-text">
+        The job to be done that shaped this project: a parent who wants their everyday
+        purchases to also benefit the environment and their family, tied to a charitable cause
+        they can trust.
+      </p>
+      <p class="body-text">
+        I used the JTBD framework to assign tasks and personalize the user experience throughout
+        the build, and it's a method I plan to keep using going forward.
+      </p>
+      <p class="caption">The full JTBD board: three personas mapped across functional and emotional jobs</p>
+    </section>
+
+    <!-- 06 -->
+    <section>
+      <h2 class="section-heading"><span class="num">06</span><span class="serif">The Foundational User Flow</span></h2>
+      <p class="body-text">
+        Before any screen got drawn, the flow had to hold together end to end: splash screen,
+        into login, onto a dashboard where someone can shop or explore CO2 savings, into a
+        product flow, and through to a donation moment at checkout.
+      </p>
+      <div class="step-rail">
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector hide"></div><span class="step-badge">1</span><div class="step-connector"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Splash</p><p class="step-detail">App entry point</p></div>
+        </div>
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector"></div><span class="step-badge">2</span><div class="step-connector"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Log in</p><p class="step-detail">Or sign up</p></div>
+        </div>
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector"></div><span class="step-badge">3</span><div class="step-connector"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Dashboard</p><p class="step-detail">Shop or view CO2 savings</p></div>
+        </div>
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector"></div><span class="step-badge">4</span><div class="step-connector"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Product</p><p class="step-detail">Browse and select</p></div>
+        </div>
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector"></div><span class="step-badge">5</span><div class="step-connector"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Cart</p><p class="step-detail">Round up for charity?</p></div>
+        </div>
+        <div class="step">
+          <div class="step-line-row"><div class="step-connector"></div><span class="step-badge">6</span><div class="step-connector hide"></div></div>
+          <div class="step-label-wrap"><p class="step-title">Checkout</p><p class="step-detail">Payment + donation confirmation</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section>
+      <h2 class="section-heading"><span class="num">07</span><span class="serif">Wireframes and Prototype</span></h2>
+      <p class="body-text">Wireframes were built using a mix of Balsamiq and hand-drawn sketches on graph paper.</p>
+      <h3 class="sub">A few deliberate restraint decisions</h3>
+      <div class="tradeoff-list">
+        <div class="tradeoff-row">
+          <p class="tradeoff-title">Landing page motion</p>
+          <div class="tradeoff-cols">
+            <div class="tradeoff-item"><span class="dot kept"></span><div><p class="tradeoff-label">Kept</p><p class="tradeoff-text">A calm, static hero that gets out of the way of the first task.</p></div></div>
+            <div class="tradeoff-item"><span class="dot cut"></span><div><p class="tradeoff-label">Cut</p><p class="tradeoff-text">A looping background video, visually impressive but overdesigned for what the moment needed.</p></div></div>
+          </div>
+        </div>
+        <div class="tradeoff-row">
+          <p class="tradeoff-title">Company information pages</p>
+          <div class="tradeoff-cols">
+            <div class="tradeoff-item"><span class="dot kept"></span><div><p class="tradeoff-label">Kept</p><p class="tradeoff-text">Short, scannable copy that respects the time someone's actually willing to spend.</p></div></div>
+            <div class="tradeoff-item"><span class="dot cut"></span><div><p class="tradeoff-label">Cut</p><p class="tradeoff-text">Long-form company information, more text than any real user would read before bouncing.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bleed">
+      <div class="bleed-caption">Early hand-drawn sketches, graph paper</div>
+      <div class="graph-paper">
+        <div class="gp-panel left">
+          <div class="gp-row">
+            <span class="rot" style="text-decoration:underline">Products</span>
+            <span class="rot" style="font-weight:600">Home</span>
+          </div>
+          <div class="gp-items">
+            <div class="gp-item"><div class="gp-box"></div><span>mug</span></div>
+            <div class="gp-item"><div class="gp-box"></div><span>shirt</span></div>
+            <div class="gp-item"><div class="gp-box"></div><span>thermostat</span></div>
+            <div class="gp-item"><div class="gp-box"></div><span>ev charger</span></div>
+            <div class="gp-item"><div class="gp-box"></div><span>notes</span></div>
+            <div class="gp-item"><div class="gp-box"></div><span>filters</span></div>
+          </div>
+          <div class="gp-detail">
+            <p style="font-weight:600">Thermostat, 1 + $9.99</p>
+            <p style="text-decoration:underline">How it helps</p>
+            <p class="gp-note">regulate home temp to save home heating cost and energy use</p>
+            <div class="gp-btn">Add to Cart</div>
+          </div>
+        </div>
+        <div class="gp-panel right">
+          <p style="font-size:0.75rem;font-weight:600;text-decoration:underline;margin:0 0 0.75rem;">Your Charity</p>
+          <p class="rot" style="font-size:0.75rem;margin:0 0 0.75rem;">Cart</p>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;margin-bottom:0.75rem;">
+            <div class="gp-box" style="height:2rem;width:2rem;"></div>
+            <span>Smart Thermo $9.99</span>
+          </div>
+          <p class="gp-note" style="margin-bottom:0.75rem;">Round up or add more to charity? <strong>Yes</strong> / No Thank you</p>
+          <div class="gp-items">
+            <div class="gp-box"></div><div class="gp-box"></div><div class="gp-box"></div>
+          </div>
+          <p style="font-size:0.75rem;font-weight:600;margin:0 0 0.25rem;">carbon removal $10.00</p>
+          <p class="gp-note" style="margin-bottom:0.5rem;">Thank you for your purchase!</p>
+          <div class="gp-pay"><span>GPay</span><span>APPLE</span><span>PayPal</span></div>
+        </div>
+      </div>
+      <p class="bleed-caption" style="margin-top:1rem;text-align:center;font-style:italic;">Where it started: hand-drawn on graph paper, pencil and a lot of erasing</p>
+    </div>
+
+    <div class="bleed">
+      <div class="bleed-caption">Balsamiq wireframes: full app flow, splash to checkout</div>
+      <div class="phone-strip">
+        <div class="phone-wrap">
+          <div class="phone dark" style="justify-content:flex-end;">
+            <div class="phone-notch"></div>
+            <div style="flex:1;"></div>
+            <span class="phone-tiny" style="color:rgba(255,255,255,0.5);">Tap to start</span>
+          </div>
+          <span class="phone-label">Splash</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <span class="phone-mid" style="font-weight:600;">Log in</span>
+            <div class="pline" style="width:66%;"></div>
+            <div class="pimg" style="height:0.75rem;"></div>
+            <div class="pimg" style="height:0.75rem;"></div>
+            <span class="phone-tiny" style="text-align:center;">or</span>
+            <div style="display:flex;gap:0.375rem;justify-content:center;">
+              <div class="pimg" style="height:0.75rem;width:0.75rem;border-radius:999px;"></div>
+              <div class="pimg" style="height:0.75rem;width:0.75rem;border-radius:999px;"></div>
+            </div>
+            <span class="phone-tiny" style="color:#3b82f6;">Forgot Login?</span>
+          </div>
+          <span class="phone-label">Log in / Sign up</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div style="background:#262626;border-radius:0.375rem;padding:0.375rem;color:#fff;">
+              <span class="phone-tiny" style="font-weight:600;">Hi Som,</span>
+              <div class="pline" style="background:rgba(255,255,255,0.25);width:75%;margin-top:0.25rem;"></div>
+              <span class="phone-tiny" style="color:#34d399;">Make a Difference</span>
+            </div>
+            <div class="pbtn solid">Start here</div>
+            <span class="phone-tiny">Available Charities</span>
+            <div class="pimg" style="height:2rem;"></div>
+          </div>
+          <span class="phone-label">Welcome</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="pline"></div>
+            <div class="pline" style="width:83%;"></div>
+            <div class="pline" style="width:66%;"></div>
+            <div class="gp-items" style="grid-template-columns:repeat(2,1fr);">
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+            </div>
+          </div>
+          <span class="phone-label">Product type</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <span class="phone-mid" style="font-weight:600;">Products</span>
+            <div class="gp-items" style="grid-template-columns:repeat(2,1fr);">
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+              <div class="pimg" style="height:2.5rem;"></div>
+            </div>
+          </div>
+          <span class="phone-label">Products</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <span class="phone-tiny" style="font-weight:600;">Smart Thermostat</span>
+            <div class="pimg" style="height:2.5rem;width:2.5rem;border-radius:999px;align-self:center;"></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.5rem;">
+              <span>&minus; 1 +</span><span>$49.99</span>
+            </div>
+            <span class="phone-tiny">How it helps</span>
+            <div class="gp-items" style="grid-template-columns:repeat(3,1fr);">
+              <div class="pbtn outline">Save money</div>
+              <div class="pbtn outline">Lower use</div>
+              <div class="pbtn outline">Give back</div>
+            </div>
+            <div class="pbtn solid">Add to cart</div>
+          </div>
+          <span class="phone-label">Selected product</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <span class="phone-mid" style="font-weight:600;">Cart</span>
+            <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.5rem;">
+              <div class="pimg" style="height:1rem;width:1rem;border-radius:999px;flex-shrink:0;"></div>
+              <div class="pline" style="width:75%;"></div>
+              <span>$49.99</span>
+            </div>
+            <span class="phone-tiny">Round up purchase for charity?</span>
+            <div class="gp-items" style="grid-template-columns:repeat(2,1fr);">
+              <div class="pbtn solid">Yes Please</div>
+              <div class="pbtn outline">No Thank you</div>
+            </div>
+          </div>
+          <span class="phone-label">Cart</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <span class="phone-mid" style="font-weight:600;">Select a charity</span>
+            <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.5rem;">
+              <div class="pimg" style="height:1.5rem;width:1.5rem;flex-shrink:0;"></div>
+              <span>removes carbon from the atmosphere</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.5rem;">
+              <div class="pimg" style="height:1.5rem;width:1.5rem;flex-shrink:0;"></div>
+              <span>provides sustainable homes for the homeless</span>
+            </div>
+            <span class="phone-tiny">Amount rounded to total $10.00</span>
+            <span class="phone-tiny" style="font-weight:600;">New Total $59.99</span>
+            <div class="pbtn solid">Go to Purchase</div>
+          </div>
+          <span class="phone-label">Yes: Pick charity</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.5rem;">
+              <div class="pimg" style="height:1rem;width:1rem;border-radius:999px;flex-shrink:0;"></div>
+              <span>Smart Thermostat / $49.99</span>
+            </div>
+            <span class="phone-tiny">Billing Address</span>
+            <div class="gp-items" style="grid-template-columns:repeat(3,1fr);">
+              <div class="pimg" style="height:0.75rem;"></div>
+              <div class="pimg" style="height:0.75rem;"></div>
+              <div class="pimg" style="height:0.75rem;"></div>
+            </div>
+            <div class="pimg" style="height:0.75rem;"></div>
+            <div class="pimg" style="height:0.75rem;"></div>
+            <span class="phone-tiny">State Tax NY 8.625%</span>
+            <span class="phone-tiny" style="font-weight:600;">Total $65.75</span>
+            <div class="pbtn solid">Pay Now</div>
+          </div>
+          <span class="phone-label">Payment info</span>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone" style="justify-content:flex-end;">
+            <div class="phone-notch"></div>
+            <span class="phone-mid" style="font-weight:600;">Your Charity</span>
+            <div class="pimg" style="height:6rem;flex:1;"></div>
+            <span class="phone-tiny">Thank you for your purchase</span>
+          </div>
+          <span class="phone-label">Thank you</span>
+        </div>
+      </div>
+      <p class="bleed-caption" style="margin-top:1rem;text-align:center;font-style:italic;">Full digital wireframe set, built in Balsamiq from those sketches</p>
+    </div>
+
+    <!-- 08 -->
+    <section>
+      <h2 class="section-heading"><span class="num">08</span><span class="serif">The Finished Screen</span></h2>
+      <p class="body-text">
+        The glow-up: the welcome screen, shipped. Same flow as the wireframes above: splash
+        into a dashboard that leads with the mission before it leads with the product.
+      </p>
+      <div class="final-wrap">
+        <div class="device">
+          <div class="notch2"></div>
+          <img src="/case-studies/green-change-final-home.png" alt="Green Change app final welcome screen, showing a forest bridge photo, a 'Make a purchase' call to action, and featured climate projects including Climeworks">
+        </div>
+        <p class="device-caption">Final welcome screen, built in Figma from the wireframes above</p>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section>
+      <h2 class="section-heading"><span class="num">09</span><span class="serif">Feedback and Testing</span></h2>
+      <p class="body-text">
+        I ran an open feedback round with the app prototype using Google Forms, with about four
+        to five respondents.
+      </p>
+      <p class="body-text">
+        The feedback surfaced real inconsistencies in the app framework: the floating
+        navigation bar wasn't sticking when scrolling through content, and the font size was too
+        small in places. Those weren't opinions; they were usability problems, and I made
+        changes in response to both.
+      </p>
+      <p class="body-text">Respondents reacted positively to the experience overall.</p>
+      <p class="body-text">
+        One respondent, Marie, was retired with no prior climate awareness and limited comfort
+        with apps like this. She needed extra support to get through the session, but she
+        completed every task.
+      </p>
+      <blockquote>
+        "Found settings on homepage/main screen. Could it be a static button at the bottom of
+        the page along with the cart?"
+        <span class="attr">Court, TX</span>
+      </blockquote>
+      <blockquote>
+        "The touch target seems small (Check WCAG guidelines)."
+        <span class="attr">Respondent</span>
+      </blockquote>
+      <p class="body-text">
+        I also reviewed the WCAG guidelines and adjusted the touch targets to the best size for
+        accessibility.
+      </p>
+    </section>
+
+    <!-- 10 -->
+    <section>
+      <h2 class="section-heading"><span class="num">10</span><span class="serif">Outcome</span></h2>
+      <p class="body-text">
+        Small numbers from a small feedback round, but real ones, and the one that matters
+        most isn't a percentage.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-cell"><span class="stat-value serif">4–5</span><span class="stat-label">Respondents</span><span class="stat-note">Open feedback round via Google Forms</span></div>
+        <div class="stat-cell"><span class="stat-value serif">2</span><span class="stat-label">Usability bugs fixed</span><span class="stat-note">Sticky nav bar, font sizing</span></div>
+        <div class="stat-cell"><span class="stat-value serif">100%</span><span class="stat-label">Task completion</span><span class="stat-note">Including Marie, lowest app fluency in the round</span></div>
+        <div class="stat-cell"><span class="stat-value serif">1</span><span class="stat-label">Accessibility pass</span><span class="stat-note">Touch targets adjusted to WCAG</span></div>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section>
+      <h2 class="section-heading"><span class="num">11</span><span class="serif">Impact: What This Means for Real People</span></h2>
+      <blockquote>
+        "A stay-at-home mom buying eco-friendly baby wipes can donate her change toward carbon
+        removal in the same motion as a purchase she was already making."
+      </blockquote>
+      <p class="body-text">I had to step back and ask what this app actually does for the people using it.</p>
+      <p class="body-text">
+        The clearest measure of impact I have isn't a percentage. It's Marie. She came in with
+        no prior climate awareness and limited comfort with apps like this, and she needed extra
+        support to get through the session. But she completed every task. That's the standard I
+        actually care about: not whether a confident user can find their way through, but
+        whether someone who assumes this isn't "for them" still gets there.
+      </p>
+      <p class="body-text">
+        Companies could even donate their products or advertising space towards the app, and
+        Green Change would actively give back a percentage of profit towards the carbon removal
+        charities.
+      </p>
+      <p class="body-text">
+        Over time, the CO2 saved through donations, from individual users and in aggregate
+        across the app, could be represented visually: trees planted, degrees of warming
+        offset. Small numbers that add up to something visible. The visual representations would
+        demonstrate budding growth or even spark interest in further purchases.
+      </p>
+      <div class="tree-badge-wrap">
+        <div class="tree-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 14v7"></path><path d="M13 21h8"></path>
+            <path d="M9.8 4.5A4 4 0 0 0 8 12a4 4 0 0 0 1.5 7.5"></path>
+            <path d="M12.8 3.3a4 4 0 0 1 1.9 7.5A4 4 0 0 1 13 18.3"></path>
+            <path d="M17 4a4 4 0 0 1 0 7.5"></path>
+          </svg>
+          <span class="n">5</span>
+        </div>
+        <span class="tree-caption">Trees Planted</span>
+      </div>
+      <p class="body-text">
+        This app can never replace large e-commerce stores, and it will never single-handedly
+        neutralize global warming. But it's a step toward improving awareness and making
+        generosity a little easier to act on. I'd rather be honest about that ceiling than
+        overstate the impact.
+      </p>
+    </section>
+
+    <!-- 12 -->
+    <section>
+      <h2 class="section-heading"><span class="num">12</span><span class="serif">Reflection: How This Changed Me as a Researcher</span></h2>
+      <p class="body-text">
+        This project changed me as a designer and a researcher by showing me that ideas are
+        always evolving, and that being open to changing pace matters more than protecting an
+        original plan. I started off wanting to design what I thought looked best and had to
+        hold that instinct back to look at what was best for the users, and once I did that,
+        everything opened up.
+      </p>
+      <blockquote>
+        I used to think good UX research/design was about looking good. Now I think it's about
+        helping people feel good.
+      </blockquote>
+      <h3 class="sub">What I'd do differently next time</h3>
+      <p class="body-text">
+        The whole process from inception to initial prototype was a lot of fun. I never really
+        had a chance to flex my creative muscle, and combining different methods I learned
+        really kind of excited me. It showed me the stages of development that I love to do,
+        such as planning and organizing, especially a business plan for stakeholders.
+      </p>
+      <p class="body-text">
+        I would have really liked to collaborate with a team on this project because it would
+        have provided so many more valuable insights into things that I may have missed.
+      </p>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
